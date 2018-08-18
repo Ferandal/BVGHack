@@ -1,12 +1,5 @@
 const fs = require('fs'),
       path = require('path'),
-<<<<<<< HEAD
-      http = require('http');
-
-
-function updateTrain(json){
-  let jsonData = JSON.parse(json);
-=======
       http = require('http'),
       Line = require('./Line.js');
 const uSixStations = ['U Alt-Tegel', 'U Borsigwerke', 'U Holzhauser Str.', 'U Otisstr.', 
@@ -29,7 +22,6 @@ function updateData(json){
   }else{
     throw('leo wir wollten nur die U6!');
   }
->>>>>>> 65827b26acd97137742e6d879dd49b1f78d0e46e
 }
 
 const server = http.createServer((request, response) => {

@@ -8,7 +8,11 @@ const uSixStations = ['U Alt-Tegel', 'U Borsigwerke', 'U Holzhauser Str.', 'U Ot
                       'U Alt-Tempelhof', 'U Kaiserin-Augusta-Str.', 'U Ullsteinstr.',
                       'U Westphalweg', 'U Alt-Mariendorf'];
 
-let svg = d3.select("body").append("svg")
+const colors = [[0, 'red'], [1, 'yellow'], [2, 'green'], [3, 'yellow'], [4, 'red'], [5, 'red']]
+
+//fetch("http://localhost:8080/trainOne.json")
+
+let svg = d3.select("#canvas").append("svg")
     .attr("width", screen.width)
     .attr("height", 500)
     .attr("margin", 0)
@@ -34,3 +38,19 @@ svg.selectAll("circles")
     .attr("cx", d => uSixStations.indexOf(d) * screen.width /uSixStations.length + 15)
     .attr("r", 10)
     .attr("fill", "black")
+
+svg.selectAll("wagons")
+    .data(colors)
+    .enter().append("rect")
+    .attr("height", 7).attr("width", 10)
+    .attr("x", c => 50 + c[0] * 10)
+    .attr("y", 25)
+    .attr("fill", c => c[1])
+    .attr("stroke", c => c[1])
+    .attr("stroke-width", 2)
+    
+d3.select('#slider').call(d3.slider().axis(true).min(0).max(28).step(1))
+d3.select('#slider').style("margin-bottom", "30px")
+
+fetch("http://localhost:8080/trainOne.json")
+.then(response => console.log(response))

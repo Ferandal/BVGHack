@@ -25,12 +25,11 @@ function setColor(wagon, status) {
     child.stdin.write(wagon+","+status + "\n");
 }
 
+
 function updateData(json){
   let jsonData = JSON.parse(json);
-  let line = lines.find(x => x.line === jsonData.line);
-  console.log(line);
+  let line = lines.find(function(x){ return x.name === jsonData.line; });
   if(line){
-    console.log(line);
     line.updateTrain(jsonData);
     for(let i = 0; i < jsonData.wagonsSeats.length; i++){
       if(jsonData.wagonsSeats[i] >= 36){

@@ -7,7 +7,7 @@ class Train {
     this.currentDirection = currentDirection;
     //this.id = this.generateGUID();
     this.id = id;
-    generateWagons();
+    this.generateWagons();
   }
 
   generateGUID(){

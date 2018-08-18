@@ -27,7 +27,7 @@ svg.selectAll("boxes")
     .data(uSixStations)
     .enter().append("text")
     .text(d => d)
-    .attr("y", 42)
+    .attr("y", 85)
     .attr("x", d => uSixStations.indexOf(d) * (screen.width - 50) /uSixStations.length + 35)
     .attr("writing-mode", "tb-rl")
 
@@ -42,7 +42,8 @@ svg.selectAll("circles")
 updateColors(0);
     
 d3.select('#slider').call(d3.slider().axis(true).min(0).max(28).step(1).on("slide", (evt, value) => {
-    updateColors(value)
+    svg.selectAll("rect").remove();
+    updateColors(value);    
 }));
 d3.select('#slider').style("margin-bottom", "30px");
 
@@ -52,15 +53,39 @@ function updateColors(value){
         //console.log(response.json());
         //console.log(JSON.parse(response.formData));
         let seats = response.json().then(seats => {;
-            getColors(seats[value].wagonsSeats, value);
+            getColors(seats[value], value, 25);
+        });
+    });
+    fetch("http://localhost:8080/trainTwo.json")
+    .then(response => {
+        //console.log(response.json());
+        //console.log(JSON.parse(response.formData));
+        let seats = response.json().then(seats => {;
+            getColors(seats[value], value, 40);
+        });
+    });
+    fetch("http://localhost:8080/trainThree.json")
+    .then(response => {
+        //console.log(response.json());
+        //console.log(JSON.parse(response.formData));
+        let seats = response.json().then(seats => {;
+            getColors(seats[value], value, 55);
+        });
+    });
+    fetch("http://localhost:8080/trainFour.json")
+    .then(response => {
+        //console.log(response.json());
+        //console.log(JSON.parse(response.formData));
+        let seats = response.json().then(seats => {;
+            getColors(seats[value], value, 70);
         });
     });
 }
 
-function getColors(seats, value) {
-    console.log(seats)
-    for (let index = 0; index < seats.length; index++) {
-        let element = seats[index];
+function getColors(stop, value, y) {
+    //console.log(stop.wagonsSeats)
+    for (let index = 0; index < stop.wagonsSeats.length; index++) {
+        let element = stop.wagonsSeats[index];
         if (element < 18)
             colors[index] = [index, 'green'];
         else if (element < 33)
@@ -68,17 +93,16 @@ function getColors(seats, value) {
         else
             colors[index] = [index, 'red'];
     }
-    updateWagons(value);
+    updateWagons(stop.station, y);
 }
 
-function updateWagons(index) {
-    svg.selectAll("rect").remove();
+function updateWagons(index, y) {
     svg.selectAll("wagons")
     .data(colors)
     .enter().append("rect")
     .attr("height", 7).attr("width", 7)
     .attr("x", c => index * (screen.width - 50) /uSixStations.length + 5 + c[0] * 10)
-    .attr("y", 25)
+    .attr("y", y)
     .attr("fill", c => c[1])
     .attr("stroke", c => c[1])
     .attr("stroke-width", 2)

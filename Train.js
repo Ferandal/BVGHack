@@ -30,4 +30,4 @@ class Train {
   }
 }
 
-module.export = Train;
+module.exports = Train;

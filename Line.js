@@ -1,7 +1,7 @@
-const Train = require('./Trains,js');
+const Train = require('./Train.js');
 
 class Line{
-  constructor (stations, name) {
+  constructor(stations, name) {
     this.stations = stations;
     this.name = name;
     this.trains = [];
@@ -17,9 +17,9 @@ class Line{
       train = this.trains.push(new Train(this.stations[json.station], json.direction, json.id))
     }
     for(let i = 0; i < train.wagons.length; i ++){
-      train.wagons[i].seatsTaken = json.wagons[i];
+      train.wagons[i].seatsTaken = json.wagonsSeats[i];
     }
   }
 }
 
-module.export = Line;
+module.exports = Line;

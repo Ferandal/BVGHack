@@ -20,9 +20,9 @@ let child = execFile(program, [],
   function (error, stdout, stderr) {
     //executed when finished
 });
-function setColor(wagon, status) {
+function setColor(data) {
     child.stdin.setEncoding('utf-8');
-    child.stdin.write(wagon+","+status + "\n");
+    child.stdin.write(data + "\n");
 }
 
 
@@ -31,13 +31,16 @@ function updateData(json){
   let line = lines.find(function(x){ return x.name === jsonData.line; });
   if(line){
     line.updateTrain(jsonData);
+    let data = "";
     for(let i = 0; i < jsonData.wagonsSeats.length; i++){
       if(jsonData.wagonsSeats[i] >= 36){
-        setTimeout(() => setColor(i,1), i* 500);
+        data += "1";
       } else {
-        setTimeout(() => setColor(i,0), i* 500);
+        data += "0";
       }
     }
+    console.log(data);
+    setColor(data);
   }else{
     throw('leo wir wollten nur die U6!');
   }

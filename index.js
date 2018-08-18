@@ -2,7 +2,7 @@ const fs = require('fs'),
       path = require('path'),
       http = require('http'),
       Line = require('./Line.js');
-const uSixStations = ['U Alt-Tegel', 'U Borsigwerke', 'U Holzhauser Str.', 'U Otisstr.', 
+const uSixStations = ['U Alt-Tegel', 'U Borsigwerke', 'U Holzhauser Str.', 'U Otisstr.',
                       'U Scharnweberstr.', 'U Kurt-Schumacher-Platz', 'U Afrikanische Str.',
                       'U Rehberge', 'U Seestr.', 'U Leopoldplatz', 'S+U Wedding',
                       'U Reinickendorfer Str.', 'U Schwartzkopffstr.', 'U Naturkundemuseum',
@@ -13,12 +13,32 @@ const uSixStations = ['U Alt-Tegel', 'U Borsigwerke', 'U Holzhauser Str.', 'U Ot
                       'U Westphalweg', 'U Alt-Mariendorf'];
 
 const lines = [new Line(uSixStations,'U6')];
+let execFile = require('child_process').execFile
+let program = "build/Release/serverToArduino";
+// execFile will return immediately.
+let child = execFile(program, [],
+  function (error, stdout, stderr) {
+    //executed when finished
+});
+function setColor(wagon, status) {
+    child.stdin.setEncoding('utf-8');
+    child.stdin.write(wagon+","+status + "\n");
+}
 
 function updateData(json){
   let jsonData = JSON.parse(json);
   let line = lines.find(x => x.line === jsonData.line);
+  console.log(line);
   if(line){
+    console.log(line);
     line.updateTrain(jsonData);
+    for(let i = 0; i < jsonData.wagonsSeats.length; i++){
+      if(jsonData.wagonsSeats[i] >= 36){
+        setTimeout(() => setColor(i,1), i* 500);
+      } else {
+        setTimeout(() => setColor(i,0), i* 500);
+      }
+    }
   }else{
     throw('leo wir wollten nur die U6!');
   }
@@ -31,7 +51,7 @@ const server = http.createServer((request, response) => {
         body += chunk.toString();
     });
     request.on('end', () => {
-        updateTrain(body);
+        updateData(body);
         response.writeHead(200);
         response.end();
     });

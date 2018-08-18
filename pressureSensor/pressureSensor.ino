@@ -114,9 +114,16 @@ String makeSeatingJson() {
   String jsonString = "{\"line\":\"U6\",\"id\":16,\"baureihe\":\"D\"";
   jsonString += ",\"station\":" + String(getCurrentStation());
   jsonString += ",\"direction\":\"" + getDirectionString() + "\"";
-  jsonString += ",\"wagons\":[";
+  jsonString += ",\"wagonsSeats\":[";
   for (int i=0; i < WAGON_COUNT; i++) {
     jsonString += String(getWagonSeatingCount(i));
+    if(i < WAGON_COUNT - 1) {
+      jsonString += ",";
+    }
+  }
+  jsonString += "], \"wagonsStands\":[";
+  for (int i=0; i < WAGON_COUNT; i++) {
+    jsonString += "0";
     if(i < WAGON_COUNT - 1) {
       jsonString += ",";
     }
@@ -127,7 +134,7 @@ String makeSeatingJson() {
 
 void sendSeatingJson() {
   HTTPClient http;  //Declare an object of class HTTPClient
-  http.begin(seatingUrl);  //Specify request destination
+  http.begin(String("http://") + bvgIP + "/push");  //Specify request destination
   http.addHeader("Content-Type", "application/json");
   String jsonString = makeSeatingJson();
   int httpCode = http.POST(jsonString.c_str());            

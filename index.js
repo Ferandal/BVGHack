@@ -39,7 +39,6 @@ function updateData(json){
         data += "0";
       }
     }
-    console.log(data);
     setColor(data);
   }else{
     throw('leo wir wollten nur die U6!');

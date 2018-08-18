@@ -1,10 +1,35 @@
 const fs = require('fs'),
       path = require('path'),
+<<<<<<< HEAD
       http = require('http');
 
 
 function updateTrain(json){
   let jsonData = JSON.parse(json);
+=======
+      http = require('http'),
+      Line = require('./Line.js');
+const uSixStations = ['U Alt-Tegel', 'U Borsigwerke', 'U Holzhauser Str.', 'U Otisstr.', 
+                      'U Scharnweberstr.', 'U Kurt-Schumacher-Platz', 'U Afrikanische Str.',
+                      'U Rehberge', 'U Seestr.', 'U Leopoldplatz', 'S+U Wedding',
+                      'U Reinickendorfer Str.', 'U Schwartzkopffstr.', 'U Naturkundemuseum',
+                      'U Oranienburger Tor', 'S+U Friedrichstr.', 'U Französische Str.',
+                      'U Stadtmitte', 'U Kochstr./Checkpoint Charlie', 'U Hallesches Tor',
+                      'U Mehringdamm', 'U Platz der Luftbrücke', 'U Paradestr.', 'S+U Tempelhof',
+                      'U Alt-Tempelhof', 'U Kaiserin-Augusta-Str.', 'U Ullsteinstr.',
+                      'U Westphalweg', 'U Alt-Mariendorf'];
+
+const lines = [new Line(uSixStations,'U6')];
+
+function updateData(json){
+  let jsonData = JSON.parse(json);
+  let line = lines.find(x => x.line === jsonData.line);
+  if(line){
+    line.updateTrain(jsonData);
+  }else{
+    throw('leo wir wollten nur die U6!');
+  }
+>>>>>>> 65827b26acd97137742e6d879dd49b1f78d0e46e
 }
 
 const server = http.createServer((request, response) => {

@@ -76,7 +76,7 @@ function updateColors(value){
     });
 }
 
-function getColors(stop, value, y) {
+function getColors(stop, value, y, all=false) {
     for (let index = 0; index < stop.wagonsSeats.length; index++) {
         let element = stop.wagonsSeats[index];
         if (element < 18){
@@ -87,16 +87,18 @@ function getColors(stop, value, y) {
         }
         else{
             colors[index] = [index, 'red'];
-            let warningtext = 'Wagen ' + (index + 1) + ' von Zug ' + stop.id + ' ist zu voll';
-            svg.append('text')
-              .attr('class', 'warning')
-              .attr('text-anchor', 'end')
-              .attr('x', 300)
-              .attr('y', 470 - (warnCount * 30))
-              .style('font-size', '22px')
-              .style('fill', 'red')
-              .text(warningtext);
-            warnCount += 1;
+            if(!all){
+                let warningtext = 'Wagen ' + (index + 1) + ' von Zug ' + stop.id + ' ist zu voll';
+                svg.append('text')
+                  .attr('class', 'warning')
+                  .attr('text-anchor', 'end')
+                  .attr('x', 300)
+                  .attr('y', 470 - (warnCount * 30))
+                  .style('font-size', '22px')
+                  .style('fill', 'red')
+                  .text(warningtext);
+                warnCount += 1;
+            }
         }
     }
     updateWagons(stop.station, y);
@@ -120,7 +122,7 @@ function press() {
         fetch("http://localhost:8080/trainOne.json")
         .then(response => {
             let seats = response.json().then(seats => {;
-                getColors(seats[index], index, 25);
+                getColors(seats[index], index, 25, true);
             });
         });        
     }    

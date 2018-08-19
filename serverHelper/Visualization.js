@@ -13,13 +13,13 @@ const colors = [[0, 'red'], [1, 'yellow'], [2, 'green'], [3, 'yellow'], [4, 'red
 //fetch("http://localhost:8080/trainOne.json")
 
 let svg = d3.select("#canvas").append("svg")
-    .attr("width", screen.width - 50)
+    .attr("width", screen.width)
     .attr("height", 500)
     .style("margin", 0)
 
 svg.append("line")
     .attr("x1", 30).attr("y1", 10)
-    .attr("x2", screen.width - 80).attr("y2", 10)
+    .attr("x2", 29 * (screen.width - 50) /(uSixStations.length)).attr("y2", 10)
     .attr("stroke-width", 2)
     .attr("stroke", "black")
 
@@ -50,32 +50,24 @@ d3.select('#slider').style("margin-bottom", "30px");
 function updateColors(value){
     fetch("http://localhost:8080/trainOne.json")
     .then(response => {
-        //console.log(response.json());
-        //console.log(JSON.parse(response.formData));
         let seats = response.json().then(seats => {;
             getColors(seats[value], value, 25);
         });
     });
     fetch("http://localhost:8080/trainTwo.json")
     .then(response => {
-        //console.log(response.json());
-        //console.log(JSON.parse(response.formData));
         let seats = response.json().then(seats => {;
             getColors(seats[value], value, 40);
         });
     });
     fetch("http://localhost:8080/trainThree.json")
     .then(response => {
-        //console.log(response.json());
-        //console.log(JSON.parse(response.formData));
         let seats = response.json().then(seats => {;
             getColors(seats[value], value, 55);
         });
     });
     fetch("http://localhost:8080/trainFour.json")
     .then(response => {
-        //console.log(response.json());
-        //console.log(JSON.parse(response.formData));
         let seats = response.json().then(seats => {;
             getColors(seats[value], value, 70);
         });
@@ -83,25 +75,27 @@ function updateColors(value){
 }
 
 function getColors(stop, value, y) {
-    //console.log(stop.wagonsSeats)
     for (let index = 0; index < stop.wagonsSeats.length; index++) {
         let element = stop.wagonsSeats[index];
-        if (element < 18)
+        if (element < 18){
             colors[index] = [index, 'green'];
-        else if (element < 33)
+        }
+        else if (element < 33){
             colors[index] = [index, 'orange'];
-        else
+        }
+        else{
             colors[index] = [index, 'red'];
+        }
     }
     updateWagons(stop.station, y);
 }
-
+let trainlength  = 30 - ((screen.width - 50) /(uSixStations.length * 4));
 function updateWagons(index, y) {
     svg.selectAll("wagons")
     .data(colors)
     .enter().append("rect")
-    .attr("height", 7).attr("width", 7)
-    .attr("x", c => index * (screen.width - 50) /uSixStations.length + 5 + c[0] * 10)
+    .attr("height", 7).attr("width", (screen.width - 50) /(uSixStations.length * 12))
+    .attr("x", c => index * (screen.width - 50) /(uSixStations.length)+ trainlength + c[0] * ((screen.width - 50) /(uSixStations.length * 12) + 3))
     .attr("y", y)
     .attr("fill", c => c[1])
     .attr("stroke", c => c[1])

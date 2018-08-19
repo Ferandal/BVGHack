@@ -107,3 +107,15 @@ function updateWagons(index, y) {
     .attr("stroke", c => c[1])
     .attr("stroke-width", 2)
 }
+
+function press() {
+    svg.selectAll("rect").remove();
+    for (let index = 0; index <= 28; index++) {
+        fetch("http://localhost:8080/trainOne.json")
+        .then(response => {
+            let seats = response.json().then(seats => {;
+                getColors(seats[index], index, 25);
+            });
+        });        
+    }    
+}

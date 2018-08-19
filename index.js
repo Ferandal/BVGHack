@@ -33,8 +33,10 @@ function updateData(json){
     line.updateTrain(jsonData);
     let data = "";
     for(let i = 0; i < jsonData.wagonsSeats.length; i++){
-      if(jsonData.wagonsSeats[i] >= 36){
+      if(jsonData.wagonsSeats[i] >= 33){
         data += "1";
+      } else if (jsonData.wagonsSeats[i] >= 18) {
+        data += "2";
       } else {
         data += "0";
       }

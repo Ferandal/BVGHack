@@ -78,8 +78,11 @@ void loop() {
 }
 
 bool isPersonSitting(int carIndex, int seatIndex) {
+  if (carIndex == 5) return false; // demo
+  if (carIndex == 0 && (seatIndex == 1 || seatIndex == 2 || seatIndex == 3)) return false; // to reduce value to 32 for demo
   if (carIndex != 0 || seatIndex != 0) return true;
   int value = analogRead(WEIGHT_PIN);
+  Serial.println(value);
   if (value >= PERSON_WEIGHT) return true;
   return false;
 }

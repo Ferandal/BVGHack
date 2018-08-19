@@ -43,6 +43,7 @@ function updateData(json){
     }
     setColor(data);
     console.log(json);
+    console.log(data);
   }else{
     throw('leo wir wollten nur die U6!');
   }

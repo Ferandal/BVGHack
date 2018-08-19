@@ -9,7 +9,7 @@ const uSixStations = ['U Alt-Tegel', 'U Borsigwerke', 'U Holzhauser Str.', 'U Ot
                       'U Westphalweg', 'U Alt-Mariendorf'];
 
 const colors = [[0, 'red'], [1, 'yellow'], [2, 'green'], [3, 'yellow'], [4, 'red'], [5, 'red']]
-
+let warnCount = 0;
 //fetch("http://localhost:8080/trainOne.json")
 
 let svg = d3.select("#canvas").append("svg")
@@ -43,6 +43,8 @@ updateColors(0);
     
 d3.select('#slider').call(d3.slider().axis(true).min(0).max(28).step(1).on("slide", (evt, value) => {
     svg.selectAll("rect").remove();
+    svg.selectAll('.warning').remove();
+    warnCount = 0;
     updateColors(value);    
 }));
 d3.select('#slider').style("margin-bottom", "30px");
@@ -85,6 +87,16 @@ function getColors(stop, value, y) {
         }
         else{
             colors[index] = [index, 'red'];
+            let warningtext = 'Wagen ' + (index + 1) + ' von Zug ' + stop.id + ' ist zu voll';
+            svg.append('text')
+              .attr('class', 'warning')
+              .attr('text-anchor', 'end')
+              .attr('x', 300)
+              .attr('y', 470 - (warnCount * 30))
+              .style('font-size', '22px')
+              .style('fill', 'red')
+              .text(warningtext);
+            warnCount += 1;
         }
     }
     updateWagons(stop.station, y);
